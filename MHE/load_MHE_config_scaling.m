@@ -72,7 +72,7 @@ config.T_mx = [eye(2) zeros(2,1); -be 0 1]; %  T_mx*[y; z]  = x_est
 config.Txz = @(x,w)([w(1);w(2)+be*x]);  % T_{\sharp} x\to z
  % cost = cost_init + \sum_{i=1}^{Nk}  alpha^{i}  (c_y\|y_{k-i}-y_m_{k-i}\| +c_v \|d_{k-i}\|)
 config.cost_init = @(Nk, x_init, x)((rccm_s.alpha_opt^Nk)*2*rccm_s.cx_opt*(x-x_init)'*(x-x_init) );
-config.cost_dy = @( y_m, y, d)(rccm_s.cy_opt* (y-y_m(2))'*(y-y_m(2))+ 2*rccm_s.cv_opt*d'*d );  
+config.cost_dy = @( y_m, y, d)((rccm_s.cy_opt)* (y-y_m(2))'*(y-y_m(2))+ 2*rccm_s.cv_opt*d'*d );  
 
 config.nd =  plant.nv;
 config.ny_m = plant.ny;  % # measured output
@@ -159,7 +159,7 @@ config.T = @(x,y,v)(x);  %
  % cost = cost_init + \sum_{i=1}^{Nk}  alpha^{i}  (c_y\|y_{k-i}-y_m_{k-i}\| +c_v \|d_{k-i}\|)
  
 config.cost_init = @(Nk, x_init, x)((rccm_f.alpha_opt^Nk)*2*rccm_f.cx_opt*(x-x_init)'*(x-x_init));
-config.cost_dy = @( y_m, y, d)( rccm_f.cy_opt*(y-y_m)'*(y-y_m)+ 2*rccm_f.cv_opt*(d(2:3)'*d(2:3) )); 
+config.cost_dy = @( y_m, y, d)( 2*rccm_f.cy_opt*(y-y_m)'*(y-y_m)+ 2*rccm_f.cv_opt*(d(2:3)'*d(2:3) )); 
  
 %%
 config.nd = plant.nd;  % plant.nv

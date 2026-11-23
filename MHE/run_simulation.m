@@ -148,7 +148,8 @@ for k= 2: config.N_sim  % debug
     if tsMHE_estimator==1  % ts-MHE
         est_store_z(:, k) = x_opt(:, min(k, config.N+1));
         xw_pri_temp = est_store_z(:, k-Nk+1);
-        [est_store(:,k), err(:,k)]=proj_zx(est_store_z(:,k), ym_store(:,k), config.T_mx, config.xlim);  %%%%%%%
+        [est_store(:,k), err(:,k)]=proj_zx(est_store_z(:,k), ym_store(:,k), config.T_mx, config.xlim); % use current measured output
+        [est_store(:,k), err(:,k)]=proj_zx(est_store_z(:,k), ym_store(:,k-1), config.T_mx, config.xlim); % use estimated current output
     else
      est_store(:,k) = x_opt(:, min(k, config.N+1));
     xw_pri_temp = est_store(:, k-Nk+1);
@@ -168,7 +169,8 @@ for k= 2: config.N_sim  % debug
   
     if tsMHE_estimator==2 || (onoffN==1 && tsMHE_estimator==0)
         kt = min(k, config.N_sim-1);
-    ym_init_mx = [ym_store(:,k+1-Nk: kt+1), zeros(plant.ny,config.N-Nk)] ;  
+    %ym_init_mx = [ym_store(:,k+1-Nk: kt+1), zeros(plant.ny,config.N-Nk)];  % us current measured output
+    ym_init_mx = [ym_store(:,k+1-Nk: kt),  ym_store(:, kt), zeros(plant.ny,config.N-Nk)] ; %% use esimated current output
     else
     ym_init_mx = [ym_store(:,k+1-Nk: k), zeros(plant.ny,config.N-Nk)] ;
     end
